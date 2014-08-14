@@ -1,0 +1,36 @@
+# envtools for Vim
+
+https://github.com/thinca/vim-winenv を受けて、
+変更した環境変数を現在のVimにすぐに(再起動無しで)反映できたら面白いのに、
+と思ってやってみた。
+
+以下のコマンドで envtools.dll をコンパイルできる。
+レポジトリに同梱のものは64bit版。
+
+    cl /MD /LD envtools.vim
+
+envtools.vim と同じ場所に envtools.dll を置いた状態で読み込む。
+
+    :source envtools.vim
+
+そうすれば以下のコマンドでリロードできる。
+試しに WinEnv で FOO を設定したとしよう。
+
+    :echo Envtools('Reload', 0)
+    3
+
+正しくリロードできていることは以下のコマンドで確認できる。
+
+    :echo Envtools('Get', 'FOO')
+    BAR
+
+しかし Vim からは確認できない。
+
+    :echo $FOO
+
+これはCRTが起動時に環境変数のコピーを取り、Vimはそのコピーだけを参照するから。
+解決するには、
+Reload() の中で、CRTがやってるのと同じようにして、そのコピーを更新する
+必要がある。
+
+だが、もう疲れたよ、なんだか眠いんだ。
